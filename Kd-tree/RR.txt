@@ -1,0 +1,159 @@
+/**********************************************************************
+ *  readme.txt template
+ *  Kd-tree
+**********************************************************************/
+
+Name: Skúli Arnarsson
+Login: skulia15
+Section instructor: Steinar Eyþór Valsson
+
+Partner name: Smári Björn Gunnarsson
+Partner login: smarig15
+Partner section instructor: Guðmundur Bjarni Kristinsson
+
+/**********************************************************************
+ *  Describe the Node data type you used to implement the
+ *  2d-tree data structure.
+ **********************************************************************/
+We used the node class given in the project description check list and implemented it.
+Firstly we created the constructor that takes a point and a rectangle as parameters and initializes all private variables.
+Each node contains a point that represents the nodes location on the graph, a rectangle that represents the area of all nodes
+in the subtree of the node, and two nodes corresponding to the left and right subtrees of the node.
+
+/**********************************************************************
+ *  Describe your method for range search in a kd-tree.
+ **********************************************************************/
+We implemented the function recursively with a private helper function. The public function calls the private function sending
+in as parameters the root node, the rectangle being searched in and an empty queue of points that will eventually contain the results.
+The recursive function contains two base cases. 1. The node sent in is null and the recursion ends. 2. Rectangle of the node sent
+in does not intersect with the rectangle being searched in and the recursion ends for that node. If neither cases apply we check if
+the point of the current node is in the rectangle, if so it is added to the queue. Finally we call the recursive range function again
+for the left and right sub-trees.
+
+/**********************************************************************
+ *  Describe your method for nearest neighbor search in a kd-tree.
+ **********************************************************************/
+ We implemented the function recursively with a private helper function. The public function calls the private function sending
+ in as parameters the root node, the point to search the nearest neighbor for and the current known nearest neighbor(root point).
+ The recursive function contains two base cases. 1: The node is null, then we return the closest known point unchanged. 2: if the closest point
+ discovered so far is closer to the query point than the rectangle of the current node we return the closest known point unchanged(pruning rule).
+ If neither cases apply then we check if the point exists in the right subtrees' rectangle, if so we search that first,
+ else we search the left one first. This is to increase the effectiveness of the pruning rule.
+/**********************************************************************
+ *  Give the total memory usage in bytes (using tilde notation and
+ *  the standard 64-bit memory cost model) of your 2d-tree data
+ *  structure as a function of the number of points N. Justify your
+ *  answer below.
+ *
+ *  Include the memory for all referenced objects (deep memory),
+ *  including memory for the nodes, points, and rectangles.
+ **********************************************************************/
+
+bytes per Point2D: 32 bytes
+
+bytes per RectHV: 48 bytes
+
+bytes per KdTree of N points (using tilde notation):   ~
+[include the memory for any referenced Node, Point2D and RectHV objects]
+
+overhead	16 bytes
+object ref	8 bytes		node root
+inner class	8 bytes		node
+
+total		32 bytes
+----------------------------
+node:
+	overh 	16 bytes
+	Point	32 bytes
+	Rect	48 bytes
+	lb		8 bytes		reference
+	rt 		8 bytes		reference
+
+	total	112 bytes
+----------------------------
+	Result	32 + 112n bytes ~112n bytes
+
+/**********************************************************************
+ *  Give the expected running time in seconds (using tilde notation)
+ *  to build a 2d-tree on N random points in the unit square.
+ *  Use empirical evidence by creating a table of different values of N
+ *  and the timing results. (Do not count the time to generate the N
+ *  points or to read them in from standard input.)
+ **********************************************************************/
+      N        |    Seconds
+------------------------------
+      500      |    0.008
+      1000     |    0.011
+      2000     |    0.015
+      4000     |    0.02
+      8000     |    0.037
+      16000    |    0.065
+      32000    |    0.122
+      64000    |    0.176
+      128000   |    0.341
+      265000   |    0.679
+      512000   |    2.089
+      1024000  |    4.01
+      2048000  |    10.38
+
+a = 4.01 / 1024000 = 3.916 * 10^-6
+Test: 3.916 * 10^-6 * 512000 = 2.005
+The actual running time for N = 512000 was 2.089 so the hypothesis holds.
+The running time is ~ 3.916 * 10^-6 * N
+
+/**********************************************************************
+ *  How many nearest neighbor calculations can your brute-force
+ *  implementation perform per second for input100K.txt (100,000 points)
+ *  and input1M.txt (1 million points), where the query points are
+ *  random points in the unit square? Explain how you determined the
+ *  operations per second. (Do not count the time to read in the points
+ *  or to build the 2d-tree.)
+ *
+ *  Repeat the question but with the 2d-tree implementation.
+ **********************************************************************/
+
+                     calls to nearest() per second
+                     brute force           2d-tree
+input100K.txt           297                1699504         Calculations
+input1M.txt             12                 2981772         Calculations
+
+First we built a tree with N points and then we ran the calculations for a random point while the elapsed
+time of the stopwatch was under 1 second. Each time a calculation was done we updated a counter then we
+printed out the value of the counter.
+
+/**********************************************************************
+ *  Known bugs / limitations.
+ **********************************************************************/
+There were no bugs to our knowledge.
+
+/**********************************************************************
+ *  Describe whatever help (if any) that you received.
+ *  Don't include readings, lectures, and dæmatímar, but do
+ *  include any help from people (including course staff,
+ *  classmates, and friends) and attribute them by name.
+ **********************************************************************/
+We did not receive any help aside from readings, lectures, and dæmatímar.
+
+/**********************************************************************
+ *  Describe any serious problems you encountered.
+ **********************************************************************/
+  We didn't have any serious problems aside from that the we had to build our own test functions
+  because the given main function couldn't handle the test inputs
+
+/**********************************************************************
+ *  If you worked with a partner, assert below that you followed
+ *  the protocol as described on the assignment page. Give one
+ *  sentence explaining what each of you contributed.
+ **********************************************************************/
+We followed the given protocol for partner collaboration.
+We pair programmed our solution and both of us coded in unison. We both discussed how we would
+implement the solution. If we have to say something that only the ether person handled then
+Skúli did a lot of the calculations and Smári wrote a main function for testing our code.
+We co-wrote this readme file.
+
+/**********************************************************************
+ *  List any other comments here. Feel free to provide any feedback
+ *  on how much you learned from doing the assignment, and whether
+ *  you enjoyed doing it.
+ **********************************************************************/
+-----
